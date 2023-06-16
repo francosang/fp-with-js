@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "declarativ": "^0.1.8",
+    "rambda": "^7.5.0",
     "ramda": "^0.29.0",
     "tachyons": "^4.12.0"
   }

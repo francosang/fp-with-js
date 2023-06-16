@@ -1,7 +1,7 @@
 const R = require("ramda");
-const dsml = require("./dsml");
+const declarativ = require("declarativ");
 
-const { div, h1, table, thead, tbody, tr, td, th } = dsml;
+const { div, h1, table, thead, tbody, tr, td, th } = declarativ;
 
 const headCell = (text) => th(text).attr("class", "pa2 tl");
 
@@ -31,7 +31,6 @@ const body = (meals) => {
 }
 
 const app = (meals) => div(
-    'sans-serif bg-white pa3',
     h1("Calories Counter").attr("class", "tc"),
     table([
         header(),
@@ -40,7 +39,7 @@ const app = (meals) => div(
         "class",
         "mw7 center w-100 collapse ba b--light-gray"
     )
-);
+).attr('class', 'sans-serif bg-white pa3');
 
 module.exports = { app };
 
