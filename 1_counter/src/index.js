@@ -1,22 +1,21 @@
 import 'tachyons';
+import { diff, patch } from 'virtual-dom';
+import createElement from 'virtual-dom/create-element';
 import counter from './counter/view.js';
 
-var currentView = null;
+function init(model, node) {
+  let currentView = counter(model, emitter);
+  let rootNode = createElement(currentView);
 
-const view = model => counter(
-  model,
-  (model) => replace(model + 1, currentView),
-  (model) => replace(model - 1, currentView),
-);
+  node.appendChild(rootNode);
 
-const replace = (model, oldView) => {
-  currentView = view(model);
-  document.getElementById('app').replaceChild(currentView, oldView);
+  function emitter(model) {
+    const updatedView = counter(model, emitter);
+    const patches = diff(currentView, updatedView);
+    rootNode = patch(rootNode, patches);
+    currentView = updatedView;
+  }
 }
 
-const init = model => {
-  currentView = view(model);
-  document.getElementById('app').appendChild(currentView);
-}
-
-init(0);
+const rootNode = document.getElementById('app');
+init(0, rootNode);
