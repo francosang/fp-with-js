@@ -1,24 +1,21 @@
-import "tachyons";
+import 'tachyons';
+import { diff, patch } from 'virtual-dom';
+import createElement from 'virtual-dom/create-element';
+import counter from './counter/view.js';
 
-const { app } = require("./app.js");
+function init(model, node) {
+  let currentView = counter(model, emitter);
+  let rootNode = createElement(currentView);
 
-const meals = [
-  {
-    name: "Breakfast",
-    calories: 400,
-  },
-  {
-    name: "Lunch",
-    calories: 600,
-  },
-  {
-    name: "Dinner",
-    calories: 200,
-  },
-];
+  node.appendChild(rootNode);
 
-let components = app(meals);
+  function emitter(model) {
+    const updatedView = counter(model, emitter);
+    const patches = diff(currentView, updatedView);
+    rootNode = patch(rootNode, patches);
+    currentView = updatedView;
+  }
+}
 
-components.render("#content").then(() => {
-  console.log("Elements rendered!");
-});
+const rootNode = document.getElementById('app');
+init(0, rootNode);
