@@ -96,14 +96,14 @@ function generateDebugForm(model, emit) {
 
 function row(col1, col2) {
     return div(
-        { className: 'ba bg-light-gray cf' },
+        { className: 'w-100 flex ba pa1 bg-light-gray foot absolute bottom-0' },
         [
             div(
-                { className: 'fl w-100 w-50-ns pa2' },
+                { className: 'w-50' },
                 col1,
             ),
             div(
-                { className: 'fl w-100 w-50-ns pa2' },
+                { className: 'w-50' },
                 col2,
             ),
         ]
