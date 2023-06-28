@@ -1,7 +1,7 @@
 import { h } from 'virtual-dom';
 import hh from 'hyperscript-helpers';
 
-const { div, label, input, pre } = hh(h);
+const { div, label, input, pre, button } = hh(h);
 
 // Helper function to determine input type based on property type
 function inputWidget(model, key, value, emit) {
@@ -34,17 +34,46 @@ function inputWidget(model, key, value, emit) {
             emit(updateModel(model, key, nestedValue));
         });
     } else if (Array.isArray(value)) {
-        return value.map((item, index) =>
+        const elements = value.map((item, index) =>
             div(
                 { className: 'ml4' },
-                generateDebugForm(item, nestedValue => {
-                    const updatedArray = [...value];
-                    updatedArray[index] = nestedValue;
-                    emit(updateModel(model, key, updatedArray));
-                })
+                [
+                    generateDebugForm(item, nestedValue => {
+                        const updatedArray = [...value];
+                        updatedArray[index] = nestedValue;
+                        emit(updateModel(model, key, updatedArray));
+                    }),
+                    value.length > 1 ? button(
+                        {
+                            onclick: () => {
+                                const updatedArray = [...value];
+                                updatedArray.splice(index, 1);
+                                emit(updateModel(model, key, updatedArray));
+                            }
+                        },
+                        'Remove'
+                    ) : null,
+                ],
             )
         );
+        return div([
+            addButton(model, key, emit),
+            ...elements
+        ]);
     }
+}
+
+function addButton(model, key, emit) {
+    return button(
+        {
+            onclick: () => {
+                console.log(key);
+
+                emit(updateModel(model, key, [...model[key], model[key].at(-1)]));
+            }
+        },
+        'Copy last'
+    );
 }
 
 // Helper function to update the model with the new value
@@ -56,7 +85,7 @@ function updateModel(model, key, value) {
 function generateDebugForm(model, emit) {
     return Object.entries(model).map(([key, value]) =>
         div(
-            { className: 'mv2 mw3' },
+            { className: 'mv2 mw4' },
             [
                 label({ for: key }, `${key}: `),
                 inputWidget(model, key, value, emit)
@@ -65,19 +94,26 @@ function generateDebugForm(model, emit) {
     );
 }
 
-function debugForm(model, emit) {
+function row(col1, col2) {
     return div(
         { className: 'ba bg-light-gray cf' },
         [
             div(
                 { className: 'fl w-100 w-50-ns pa2' },
-                generateDebugForm(model, emit)
+                col1,
             ),
             div(
                 { className: 'fl w-100 w-50-ns pa2' },
-                pre(JSON.stringify(model, null, 2)),
+                col2,
             ),
         ]
+    );
+}
+
+function debugForm(model, emit) {
+    return row(
+        generateDebugForm(model, emit),
+        pre(JSON.stringify(model, null, 2)),
     );
 }
 
