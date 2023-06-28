@@ -5,7 +5,7 @@ import generateDebugForm from './debug';
 const { div, h1, button, label, form, input } = hh(h);
 
 function fieldSet(labelText, inputValue) {
-  return div([
+  return div('.pv2', [
     label({ className: 'w-100 f4' }, labelText),
     input({
       className: 'input-reset ba w-100',
@@ -15,17 +15,44 @@ function fieldSet(labelText, inputValue) {
   ]);
 }
 
+function buttomSet(model, emit) {
+  return div('pv2', [
+    button(
+      {
+        className: 'f3 pv2 ph3 bg-blue white mr2 bn',
+      },
+      'Save'
+    ),
+    button(
+      {
+        className: 'f3 pv2 ph3 bg-light-gray bn',
+        onclick: () => {
+          emit({ ...model, isAdding: false })
+        }
+      },
+      'Cancel'
+    ),
+  ]);
+}
+
+
 function formView(model, emit) {
   if (model.isAdding) {
-    return form(
+    return div(
       { className: 'w-100 mv f3' }, [
       fieldSet('Meal', model.description),
       fieldSet('Calories', model.calories || ''),
+      buttomSet(model, emit),
     ]);
   }
 
   return button(
-    { className: 'f4 pv2 ph3 bg-blue white bn' },
+    {
+      className: 'f4 pv2 ph3 bg-blue white bn',
+      onclick: () => {
+        emit({ ...model, isAdding: true })
+      }
+    },
     'Add meal'
   );
 }
