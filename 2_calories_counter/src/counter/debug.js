@@ -45,6 +45,7 @@ function inputWidget(model, key, value, emit) {
                     }),
                     value.length > 1 ? button(
                         {
+                            className: 'mb2',
                             onclick: () => {
                                 const updatedArray = [...value];
                                 updatedArray.splice(index, 1);
@@ -66,9 +67,9 @@ function inputWidget(model, key, value, emit) {
 function addButton(model, key, emit) {
     return button(
         {
+            className: 'mb2',
             onclick: () => {
                 console.log(key);
-
                 emit(updateModel(model, key, [...model[key], model[key].at(-1)]));
             }
         },
@@ -85,7 +86,7 @@ function updateModel(model, key, value) {
 function generateDebugForm(model, emit) {
     return Object.entries(model).map(([key, value]) =>
         div(
-            { className: 'mv2 mw4' },
+            { className: 'mw4 pb2' },
             [
                 label({ for: key }, `${key}: `),
                 inputWidget(model, key, value, emit)
@@ -96,7 +97,7 @@ function generateDebugForm(model, emit) {
 
 function row(col1, col2) {
     return div(
-        { className: 'w-100 flex ba pa1 bg-light-gray foot absolute bottom-0' },
+        { className: 'w-100 flex pa4 ba bg-light-gray absolute bottom-0 overflow-scroll vh-50' },
         [
             div(
                 { className: 'w-50' },
