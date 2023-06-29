@@ -69,7 +69,6 @@ function addButton(model, key, emit) {
         {
             className: 'mb2',
             onclick: () => {
-                console.log(key);
                 emit(updateModel(model, key, [...model[key], model[key].at(-1)]));
             }
         },

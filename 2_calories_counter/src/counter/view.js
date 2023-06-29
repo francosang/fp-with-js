@@ -1,6 +1,7 @@
 import { h } from 'virtual-dom';
 import hh from 'hyperscript-helpers';
 import generateDebugForm from './debug';
+import Event from './event';
 
 const { div, h1, button, label, form, input } = hh(h);
 
@@ -15,8 +16,8 @@ function fieldSet(labelText, inputValue) {
   ]);
 }
 
-function buttomSet(model, emit) {
-  return div('pv2', [
+function buttomSet(emit) {
+  return div('.pv3', [
     button(
       {
         className: 'f3 pv2 ph3 bg-blue white mr2 bn',
@@ -27,7 +28,7 @@ function buttomSet(model, emit) {
       {
         className: 'f3 pv2 ph3 bg-light-gray bn',
         onclick: () => {
-          emit({ ...model, isAdding: false })
+          emit(Event.CloseMealForm)
         }
       },
       'Cancel'
@@ -42,7 +43,7 @@ function formView(model, emit) {
       { className: 'w-100 mv f3' }, [
       fieldSet('Meal', model.description),
       fieldSet('Calories', model.calories || ''),
-      buttomSet(model, emit),
+      buttomSet(emit),
     ]);
   }
 
@@ -50,7 +51,7 @@ function formView(model, emit) {
     {
       className: 'f4 pv2 ph3 bg-blue white bn',
       onclick: () => {
-        emit({ ...model, isAdding: true })
+        emit(Event.ShowMealForm)
       }
     },
     'Add meal'
